@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX and API</title>
+</head>
+<body>
+    <button onclick="fetchMessage()">Click Me!</button>
+    <div id="message">
+
+    </div>
+</body>
+<script>
+    function fetchMessage(){
+        // initialize http request
+        let xhr  =new XMLHttpRequest();
+        //set request (method, link, asynchronus)
+        xhr.open('GET','https://dennis-enraca-school.github.io/WebSysAPI/data.json',true);
+        // run function when data is onload or api
+        xhr.onload = function(){
+            //check response status
+            if(xhr.status === 200){
+                // xhr.resposeText is a responded data from request
+                let response = JSON.parse(xhr.responseText);
+                document.getElementById('message').innerText = response.name;
+            }
+            else{
+                document.getElementById('message').innerText = "Error";
+            }
+        };
+
+        // will send the request to server
+        xhr.send();
+
+    }
+</script>
+</html>

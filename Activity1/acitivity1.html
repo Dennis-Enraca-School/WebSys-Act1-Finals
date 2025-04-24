@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch PC Specs</title>
+</head>
+<style>
+    label{
+        font-weight: bold;
+        margin-right: 5px;
+    }
+    #input-container{
+        margin: 3px;
+    }
+</style>
+<body>
+    <div id="input-container">
+        <input type="text" placeholder="Input User ID" id="user-input">
+        <button onclick="fetchMessage(event)">Get Specs</button>
+    </div>
+    <div id="message">
+    </div>
+    
+</body>
+<script>
+    function fetchMessage(event){
+        let id = document.getElementById('user-input').value;
+        if(!id){
+            event.preventDefault(); 
+            document.getElementById('message').innerHTML = 
+                `<label for="">ERROR: </label><span>User ID is empty</span><br>`;
+          
+            return;
+        }
+        // initialize http request
+        let xhr  =new XMLHttpRequest();
+        //set request (method, link, asynchronus)
+        xhr.open('GET',`https://dennis-enraca-school.github.io/WebSysAPI/specs.json?userID=${id}`,true);
+        // run function when data is onload or api
+        xhr.onload = function(){
+            //check response status
+            if(xhr.status === 200){
+                // xhr.resposeText is a responded data from request
+                let response = JSON.parse(xhr.responseText);    
+                if(response.userID == id){
+                        document.getElementById('message').innerHTML = 
+                    `
+                        <label for="">USER ID: </label><span>${response.userID}</span><br>
+                        <label for="">RAM: </label><span>${response.ram}</span><br>
+                        <label for="">Storage: </label><span>${response.storage.hdd}</span><br>
+                        <label for="">GPU: </label><span>${response.gpu}</span>        
+                    `;  
+                }else{
+                    document.getElementById('message').innerHTML = 
+                    `<label for="">ERROR: </label><span>User ID is not found</span><br>`;
+           
+                }                       
+                   
+            }
+            else{
+                document.getElementById('message').innerHTML = 
+                `<label for="">ERROR: </label><span>${xhr.statusText}</span><br>`;
+            }
+        };
+
+        // will send the request to server
+        xhr.send();
+
+    }
+</script>
+</html>
